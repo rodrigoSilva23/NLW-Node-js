@@ -1,13 +1,13 @@
 import{Request,Response} from "express"
 import { getCustomRepository } from "typeorm";
-import { surveyRepository } from "../repositories/SurveyRepository";
+import { SurveysRepository } from "../repositories/SurveysRepository";
 
-class SurveyController{
+class SurveysController{
 
     async create(request:Request , response:Response ){
         const {title,description} = request.body;
 
-        const surverysRepository = getCustomRepository(surveyRepository)
+        const surverysRepository = getCustomRepository(SurveysRepository)
 
         const survey = surverysRepository.create({
             title,
@@ -19,7 +19,7 @@ class SurveyController{
     }
 
     async show(request:Request,response:Response){
-        const surverysRepository = getCustomRepository(surveyRepository)
+        const surverysRepository = getCustomRepository(SurveysRepository)
         
         const all = await surverysRepository.find()
 
@@ -28,4 +28,4 @@ class SurveyController{
     }
 }
 
-export{SurveyController}
+export{SurveysController}
