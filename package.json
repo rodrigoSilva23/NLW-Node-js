@@ -7,13 +7,16 @@
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
     "test": "NODE_ENV=test jest",
-    "posttest":"rm ./src/database/database.test.sqlite"
+    "posttest": "rm ./src/database/database.test.sqlite"
   },
   "dependencies": {
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.32",
+    "@types/nodemailer": "^6.4.1",
     "express": "^4.17.1",
+    "handlebars": "^4.7.7",
     "jest": "^26.6.3",
+    "nodemailer": "^6.5.0",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.2",
     "ts-jest": "^26.5.3",
