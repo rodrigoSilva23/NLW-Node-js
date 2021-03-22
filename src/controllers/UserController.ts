@@ -3,6 +3,7 @@ import { getCustomRepository } from "typeorm";
 import { UsersRepository } from "../repositories/UsersRepository";
 
 import * as yup from "yup";
+import { AppError } from "../errors/AppError";
 
 
 class UserController{
@@ -15,16 +16,12 @@ class UserController{
             email: yup.string().email()
         })
 
-       /* if (!(await schema.isValid(request.body))){
-            return response.status(400).json({error: "validation failed!"})    
-            
-        }*/
-
+       
         try {
             await schema.validate(request.body,{abortEarly:false})
 
         }catch(err){
-            return response.status(400).json({error:err})
+            throw new AppError(err)
 
         }
 
@@ -35,9 +32,8 @@ class UserController{
         })
 
         if (userAlreadyExists){
-            return response.status(400).json({
-                error:"User already exists",
-            })
+            throw new AppError("User already exists")
+            
         }
 
         const user = usersRepository.create({

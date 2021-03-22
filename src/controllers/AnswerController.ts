@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
+import { AppError } from "../errors/AppError";
 import { SurveysUsersRepository } from "../repositories/SurveysUsersRepository";
 
 
@@ -18,9 +19,8 @@ async execute(request:Request, response:Response){
         
     })
     if(!surveyUSer){
-        return response.status(400).json({
-            error:"Sur does not exist"
-        })
+        throw new AppError("Survey does not exist")
+       
     }
 
     surveyUSer.value = Number(value)
