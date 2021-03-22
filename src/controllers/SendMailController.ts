@@ -35,28 +35,35 @@ import {resolve} from 'path'
 
          const npsPath = resolve(__dirname,"..","views","emails","npsMail.hbs")
 
-         const variables ={
-             name: userAlreadyExists.name,
-             title: survey.title ,
-             description:survey.description,
-             user_id:userAlreadyExists.id,
-             link:process.env.URL_MAIL
+         
+         
+         const surveyUSerAlreadyExists = await surveysUsersRepository.findOne({
+             where: {user_id:userAlreadyExists.id,value:null},
+             relations:["user","survey"],
+            })
+            
+            const variables ={
+                name: userAlreadyExists.name,
+                title: survey.title ,
+                description:survey.description,
+                id:"",
+                link:process.env.URL_MAIL
+            }
+
+         if(surveyUSerAlreadyExists){
+             variables.id =surveyUSerAlreadyExists.id
+             await SendMailService.execute(email,survey.title,variables,npsPath)
+             return response.json(surveyUSerAlreadyExists)
          }
 
-
-         const surveyUSerAlreadyExists = await surveysUsersRepository.findOne({
-            where: [{user_id:userAlreadyExists.id},{value:null}]
-         })
          const surveyUser = surveysUsersRepository.create({
              user_id: userAlreadyExists.id,
              survey_id,
          })
 
-         if(surveyUSerAlreadyExists){
-             await SendMailService.execute(email,survey.title,variables,npsPath)
-         }
 
          await surveysUsersRepository.save(surveyUser)
+         variables.id=surveyUser.id
          
          await SendMailService.execute(email,survey.title,variables,npsPath)
          return response.json(surveyUser) 
